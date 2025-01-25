@@ -87,6 +87,13 @@ module "sg" {
       description = "Prometheus"
       cidr_blocks = "0.0.0.0/0"
     },
+    {
+      from_port   = 3000
+      to_port     = 3000
+      protocol    = "tcp"
+      description = "grafna"
+      cidr_blocks = "0.0.0.0/0"
+    },
   ]
 
   egress_with_cidr_blocks = [
@@ -124,7 +131,7 @@ module "jenkins_ec2_instance" {
   ebs_block_device = [
     {
       device_name           = "/dev/xvdf"
-      volume_size           = 25
+      volume_size           = 50
       volume_type           = "gp2"
       delete_on_termination = true
     }
@@ -149,13 +156,13 @@ module "monitoring_ec2_instance" {
   vpc_security_group_ids      = [module.sg.security_group_id]
   subnet_id                   = module.vpc.public_subnets[0]
   associate_public_ip_address = true
-  # No user_data for this instance
+  user_data                   = file("prometheus-install.sh") # user data for installing prometheus, node exporter and grafna
   availability_zone           = data.aws_availability_zones.azs.names[0]
 
   ebs_block_device = [
     {
       device_name           = "/dev/xvdf"
-      volume_size           = 25
+      volume_size           = 30
       volume_type           = "gp2"
       delete_on_termination = true
     }

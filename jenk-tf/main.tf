@@ -128,12 +128,13 @@ module "jenkins_ec2_instance" {
   user_data                   = file("jenkins-install.sh") # User data for Jenkins
   availability_zone           = data.aws_availability_zones.azs.names[0]
 
-   # Configure the root block device
-    root_block_device = {
-    volume_size = 50   # Size of the root volume in GB
-    volume_type = "gp2" # General Purpose SSD
-  }
-  
+
+    root_block_device = [
+      {
+        volume_size = 50   # Size of the root volume in GB
+        volume_type = "gp2" # General Purpose SSD
+      }
+  ]
 
   tags = {
     Name        = "jenkins-server"
@@ -157,11 +158,12 @@ module "monitoring_ec2_instance" {
   user_data                   = file("prometheus-install.sh") # user data for installing prometheus, node exporter and grafna
   availability_zone           = data.aws_availability_zones.azs.names[0]
 
-     # Configure the root block device
-      root_block_device = {
+    root_block_device = [
+      {
       volume_size = 25   # Size of the root volume in GB
       volume_type = "gp2" # General Purpose SSD
-      }  
+      }
+  ]
   
 
   tags = {

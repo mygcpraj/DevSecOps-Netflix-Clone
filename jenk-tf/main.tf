@@ -88,6 +88,13 @@ module "sg" {
       cidr_blocks = "0.0.0.0/0"
     },
     {
+      from_port   = 9100
+      to_port     = 9100
+      protocol    = "tcp"
+      description = "node exporter"
+      cidr_blocks = "0.0.0.0/0"
+    },
+    {
       from_port   = 3000
       to_port     = 3000
       protocol    = "tcp"
